@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.URL;
 
 public class Wget implements Runnable {
+
+    private static final String DOWNLOADED = "downloaded_";
     private final String url;
     private final int speed;
 
@@ -17,7 +19,8 @@ public class Wget implements Runnable {
     @Override
     public void run() {
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream("pom_tmp.xml")) {
+             FileOutputStream fileOutputStream = new FileOutputStream(DOWNLOADED + url.
+                     substring(url.lastIndexOf("/") + 1))) {
             byte[] dataBuffer = new byte[1024];
             int bytesRead;
             var launch = System.currentTimeMillis();
@@ -35,7 +38,7 @@ public class Wget implements Runnable {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        if (args.length > 2) {
+        if (args.length < 2) {
             throw new IllegalArgumentException("Not acceptable quantity of the parameters.");
         }
         String url = args[0];
