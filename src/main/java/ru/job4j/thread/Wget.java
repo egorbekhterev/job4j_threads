@@ -8,6 +8,7 @@ import java.net.URL;
 public class Wget implements Runnable {
 
     private static final String DOWNLOADED = "downloaded_";
+    private static final int ONE_SECOND = 1000;
     private final String url;
     private final int speed;
 
@@ -23,14 +24,20 @@ public class Wget implements Runnable {
                      substring(url.lastIndexOf("/") + 1))) {
             byte[] dataBuffer = new byte[1024];
             int bytesRead;
+            int downloadData = 0;
             var launch = System.currentTimeMillis();
             while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
-                var diff = System.currentTimeMillis() - launch;
-                if (diff < speed) {
-                    Thread.sleep(speed - diff);
+                downloadData += bytesRead;
+                if (downloadData >= speed) {
+                    var diff = System.currentTimeMillis() - launch;
+                    if (diff < ONE_SECOND) {
+                        Thread.sleep(ONE_SECOND - diff);
+                    }
+                    downloadData = 0;
+                    launch = System.currentTimeMillis();
                 }
+
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
-                launch = System.currentTimeMillis();
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
