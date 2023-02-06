@@ -1,4 +1,4 @@
-package ru.job4j.thread.wait;
+package ru.job4j.thread.buffer;
 
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
@@ -17,31 +17,20 @@ public final class SimpleBlockingQueue<T> {
         this.limit = limit;
     }
 
-    public synchronized void offer(T value) {
+    public synchronized void offer(T value) throws InterruptedException {
         while (queue.size() == limit) {
-            try {
                 wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-        if (queue.isEmpty()) {
-            notifyAll();
         }
         queue.offer(value);
+        notifyAll();
     }
 
-    public synchronized T poll() {
+    public synchronized T poll() throws InterruptedException {
         while (queue.isEmpty()) {
-            try {
                 wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
         }
-        if (queue.size() == limit) {
-            notifyAll();
-        }
-        return queue.poll();
+        T rsl = queue.poll();
+        notifyAll();
+        return rsl;
     }
 }

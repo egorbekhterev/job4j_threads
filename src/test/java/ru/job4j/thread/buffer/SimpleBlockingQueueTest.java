@@ -1,4 +1,4 @@
-package ru.job4j.thread.wait;
+package ru.job4j.thread.buffer;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,14 +15,22 @@ class SimpleBlockingQueueTest {
         SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(limit);
         Thread producer = new Thread(() -> {
             for (int i = 0; i < limit; i++) {
-                queue.offer(i);
+                try {
+                    queue.offer(i);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         });
         List<Integer> list = new ArrayList<>();
         Thread consumer = new Thread(
                 () -> {
                     for (int i = 0; i < limit; i++) {
-                        list.add(queue.poll());
+                        try {
+                            list.add(queue.poll());
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
                     }
                 }
         );
