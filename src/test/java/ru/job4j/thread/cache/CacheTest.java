@@ -43,13 +43,10 @@ class CacheTest {
     void whenUpdateAlreadyChangedVersion() {
         Base base = new Base(1, 0);
         cache.add(base);
-
         Base user1 = cache.getValue(1);
         user1.setName("User 1");
-
         Base user2 = cache.getValue(1);
         user2.setName("User 2");
-
         assertThatThrownBy(() -> {
             cache.update(user1);
             cache.update(user2);
