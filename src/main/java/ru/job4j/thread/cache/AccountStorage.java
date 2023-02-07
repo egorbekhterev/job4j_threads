@@ -4,7 +4,6 @@ import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @ThreadSafe
@@ -25,14 +24,7 @@ public final class AccountStorage {
     }
 
     public synchronized Optional<Account> getById(int id) {
-        Optional<Account> rsl = Optional.empty();
-        for (Map.Entry<Integer, Account> entry : accounts.entrySet()) {
-            if (entry.getKey().equals(id)) {
-                rsl = Optional.of(entry.getValue());
-                break;
-            }
-        }
-        return rsl;
+        return Optional.ofNullable(accounts.get(id));
     }
 
     public synchronized boolean transfer(int fromId, int toId, int amount) {
