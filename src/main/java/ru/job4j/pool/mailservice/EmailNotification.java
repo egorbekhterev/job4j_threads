@@ -9,13 +9,10 @@ public class EmailNotification {
     );
 
     public void emailTo(User user) {
-        pool.submit(new Runnable() {
-            @Override
-            public void run() {
-                String subject = String.format("Notification %s to email %s.", user.getUsername(), user.getEmail());
-                String body = String.format("Add a new event to %s.", user.getUsername());
-                send(subject, body, user.getEmail());
-            }
+        pool.submit(() -> {
+            String subject = String.format("Notification %s to email %s.", user.getUsername(), user.getEmail());
+            String body = String.format("Add a new event to %s.", user.getUsername());
+            send(subject, body, user.getEmail());
         });
     }
 
