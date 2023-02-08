@@ -1,5 +1,6 @@
 package ru.job4j.pool.parallelsearch;
 
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
 public class ParallelSearch<T> extends RecursiveTask<Integer> {
@@ -39,5 +40,10 @@ public class ParallelSearch<T> extends RecursiveTask<Integer> {
         var left = leftPart.join();
         var right = rightPart.join();
         return Math.max(left, right);
+    }
+
+    public static <T> int parallelSearch(T[] array, T element) {
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        return forkJoinPool.invoke(new ParallelSearch<>(array, 0, array.length - 1, element));
     }
 }
