@@ -200,7 +200,7 @@ public class Examples {
     }
 
     public static void main(String[] args) throws Exception {
-        /* runAsyncExample();
+        runAsyncExample();
         supplyAsyncExample();
         thenRunExample();
         thenAcceptExample();
@@ -208,7 +208,7 @@ public class Examples {
         thenComposeExample();
         thenCombineExample();
         allOfExample();
-        anyOfExample(); */
+        anyOfExample();
         System.out.println(Arrays.toString(asyncSum(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}})));
     }
 }
